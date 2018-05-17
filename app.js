@@ -35,11 +35,21 @@ client.on('chat', function(channel, user, message, self) {
     }
 //    client.action("rawvoltage", user['display-name'])
     try {
-//        if (message.slice((5)) == "!join" && (user['badges']['broadcaster'] == 1 || user['mod'] == true))
-        if (message.slice(5) == "!join")
+        if (message.includes("!join") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
 //            console.log(user['badges']['broadcaster'])
-//            client.join(message.slice(6))
-//            client.action("rawvoltage", "You have succesfully joined " + message.slice(6))
+            console.log(message.slice(6))
+            client.join(message.slice(6))
+        }
+    } catch (err) {
+        client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
+        console.log(err.message)
+    }
+    
+    try {
+        if (message.includes("!leave") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
+            console.log(message.slice(7))
+            client.part(message.slice(7))
+            }
     } catch (err) {
         client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
         console.log(err.message)
@@ -47,15 +57,18 @@ client.on('chat', function(channel, user, message, self) {
 })
 
 client.on("join", function(channel, username, self) {
-    if (username === "streamelements") return
+    if (username === "streamelements") {
+        return
+    }
 //    client.action("rawvoltage", username + " <3")
     
     const vips = ["alexa", "anteluce", "danyellyjelly", "ivircatalyst", "letzie", "rawvoltage", "sumbunny", "tiffae", "tinaqt", "xequ"]
     
     const matching = vips.filter((vips) => username.includes(vips))
 //    console.log(matching)
-    if (matching.length == 0) return
-    else client.whisper("rawvoltage", username + " has joined " + channel)
+    if (matching.length == 0) {
+        return
+    } else client.whisper("rawvoltage", username + " has joined " + channel)
     console.log(matching)
     
 })
