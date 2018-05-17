@@ -35,10 +35,11 @@ client.on('chat', function(channel, user, message, self) {
     }
 //    client.action("rawvoltage", user['display-name'])
     try {
-        if (message.includes("!join") && (user['badges']['broadcaster'] == 1 || user['mod'] == true))
+//        if (message.slice((5)) == "!join" && (user['badges']['broadcaster'] == 1 || user['mod'] == true))
+        if (message.slice(5) == "!join")
 //            console.log(user['badges']['broadcaster'])
-            client.join(message.slice(6))
-            client.action("rawvoltage", "You have succesfully joined " + message)
+//            client.join(message.slice(6))
+//            client.action("rawvoltage", "You have succesfully joined " + message.slice(6))
     } catch (err) {
         client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
         console.log(err.message)
