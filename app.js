@@ -19,7 +19,9 @@ const options = {
 const client = new tmi.client(options)
 client.connect()
 
-client.on('chat', function(channel, user, message, self) {
+let currentlyJoined = []
+
+//client.on('chat', function(channel, user, message, self) {
     if (self) return
     
     if (message == "!twitter") {
@@ -34,21 +36,34 @@ client.on('chat', function(channel, user, message, self) {
         client.whisper("rawvoltage", "You have been mentioned by " + user['display-name'] + " in channel " + channel)
     }
 //    client.action("rawvoltage", user['display-name'])
-    try {
+    try { // join command
         if (message.includes("!join") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
-//            console.log(user['badges']['broadcaster'])
             client.join(message.slice(6))
-            client.action("rawvoltage", "You have succesfully joined " + message.slice(6))
+            currentlyJoined.push(message.slice(6))
+//            client.action("rawvoltage", "You are currently in the following channels: " + currentlyJoined)
+//            client.action("rawvoltage", "You have succesfully joined " + message.slice(6) + currentlyJoined)
         }
     } catch (err) {
         client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
         console.log(err.message)
     }
     
-    try {
+    try { // leave command
         if (message.includes("!leave") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
             client.part(message.slice(7))
             client.action("rawvoltage", "Left " + message.slice(7))
+            }
+    } catch (err) {
+        client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
+        console.log(err.message)
+    }
+    
+    try { // reset command
+        if (message.includes("!reset") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
+//            console.log(currentlyJoined.forEach)
+            currentlyJoined.forEach(function (e) {
+                console.log(e)
+            })
             }
     } catch (err) {
         client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
