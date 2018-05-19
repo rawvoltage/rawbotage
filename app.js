@@ -21,7 +21,7 @@ client.connect()
 
 let currentlyJoined = []
 
-//client.on('chat', function(channel, user, message, self) {
+client.on('chat', function(channel, user, message, self) {
     if (self) return
     
     if (message == "!twitter") {
@@ -39,9 +39,12 @@ let currentlyJoined = []
     try { // join command
         if (message.includes("!join") && (user['badges']['broadcaster'] == 1 || user['mod'] == true)) {
             client.join(message.slice(6))
-            currentlyJoined.push(message.slice(6))
-//            client.action("rawvoltage", "You are currently in the following channels: " + currentlyJoined)
-//            client.action("rawvoltage", "You have succesfully joined " + message.slice(6) + currentlyJoined)
+            if (currentlyJoined.includes(message.slice(6) == false)) {
+                currentlyJoined.push(message.slice(6))
+                console.log(currentlyJoined)
+            }
+            let currentlyJoinedOut = currentlyJoined.join(', ')
+            client.action("rawvoltage", "You have succesfully joined " + message.slice(6) + "! (" + currentlyJoinedOut + ")")
         }
     } catch (err) {
         client.action("rawvoltage", user['display-name'] + " You are not authorized to use this command.")
